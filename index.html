@@ -10,406 +10,907 @@
             background-color: #f4f4f4;
         }
         header {
-            background: #343a40;
+            background: #007bff;
             color: #ffffff;
             padding: 10px 0;
             text-align: center;
         }
-        .menu {
-            display: flex;
-            justify-content: center;
+        .container {
             margin-top: 20px;
         }
-        .menu button {
-            margin: 0 5px;
+        .tab-content {
+            background: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
         }
-        .section {
-            display: none;
+        .nav-link {
+            transition: background-color 0.3s ease;
         }
-        .section.active {
+        .nav-link:hover {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+        .modal-header, .modal-footer {
+            border: none;
+        }
+        .btn-primary {
+            background-color: #28a745;
+            border: none;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+        ul li a{
+            margin: 10px;
+        }
+        label {
             display: block;
-            margin-top: 20px;
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
-        .form-container {
-            margin-bottom: 20px;
+        .nest{
+            margin-top: 100px;
         }
+
     </style>
 </head>
 <body>
 
 <header>
     <h1>Gestion de l'Orphelinat</h1>
-</header>
-
-<div class="menu">
-    <button class="btn btn-secondary" onclick="showSection('personnel')">Personnel</button>
-    <button class="btn btn-secondary" onclick="showSection('enfants')">Enfants</button>
-    <button class="btn btn-secondary" onclick="showSection('tuteurs')">Tuteurs</button>
-    <button class="btn btn-secondary" onclick="showSection('chambres')">Chambres</button>
-    <button class="btn btn-secondary" onclick="showSection('activites')">Activités</button>
-    <button class="btn btn-secondary" onclick="showSection('budgets')">Budgets</button>
-    <button class="btn btn-secondary" onclick="showSection('archives')">Archives</button>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Menu</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#enfants">Enfants</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personnel">Personnel</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#dons">Dons</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#activites">Activités</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#ressources">Ressources</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#budgets">Budgets</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#adoptions">Adoptions</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#archives_enfants">Archives Enfants</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#archives_personnel">Archives Personnel</a></li>
+               
+                </ul>
+            </div>
+        </nav>
+    
+        <div class="tab-content mt-3">
+            <!-- Section: Enfants -->
+            <div class="tab-pane fade show active" id="enfants">
+                <h2>Gestion des Enfants</h2>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addEnfantModal">Ajouter un Enfant</button>
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Date de Naissance</th>
+                            <th>Date Entrée</th>
+                            <th>Historique Médical</th>
+                            <th>Tuteur ID</th>
+                            <th>École Résidence</th>
+                            <th>Chambre</th>
+                            <th>Sexe</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enfantsTableBody"></tbody>
+                </table>
+            </div>
+            <!-- Formulaire d'ajout pour Enfants -->
+<div class="modal fade" id="addEnfantModal" tabindex="-1" role="dialog" aria-labelledby="addEnfantModalLabel" aria-hidden="true">
+    <h2 class="nest">Ajout d'un enfant </h2>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEnfantModalLabel">Ajouter un Enfant</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addEnfantForm">
+                    <div class="form-group">
+                        <label for="enfantNom">Nom</label>
+                        <input type="text" class="form-control" id="enfantNom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="enfantPrenom">Prénom</label>
+                        <input type="text" class="form-control" id="enfantPrenom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="enfantDateNaissance">Date de Naissance</label>
+                        <input type="date" class="form-control" id="enfantDateNaissance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="enfantDateEntree">Date d'Entrée</label>
+                        <input type="date" class="form-control" id="enfantDateEntree">
+                    </div>
+                    <div class="form-group">
+                        <label for="enfantMedHist">Historique Médical</label>
+                        <textarea class="form-control" id="enfantMedHist"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="enfantTuteurId">Tuteur ID</label>
+                        <input type="number" class="form-control" id="enfantTuteurId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="enfantScoleRes">École Résidence</label>
+                        <input type="text" class="form-control" id="enfantScoleRes">
+                    </div>
+                    <div class="form-group">
+                        <label for="enfantChambre">Chambre</label>
+                        <input type="number" class="form-control" id="enfantChambre">
+                    </div>
+                    <div class="form-group">
+                        <label for="enfantSexe">Sexe</label>
+                        <select class="form-control" id="enfantSexe" required>
+                            <option value="Masculin">Masculin</option>
+                            <option value="Féminin">Féminin</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="submitEnfantForm">Ajouter l'Enfant</button>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- Gestion du Personnel -->
+<div class="tab-pane fade" id="personnel">
+    <h2>Gestion du Personnel</h2>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addPersonnelModal">Ajouter un Membre du Personnel</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Poste</th>
+                <th>Salaire</th>
+                <th>Horaire</th>
+                <th>Date d'Embauche</th>
+                <th>Max Enfants</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="personnelTableBody"></tbody>
+    </table>
+</div>
+<!-- Formulaire d'ajout pour Personnel -->
+<div class="modal fade" id="addPersonnelModal" tabindex="-1" role="dialog" aria-labelledby="addPersonnelModalLabel" aria-hidden="true">
+    <h2 class="nest">Ajout du personnel </h2>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPersonnelModalLabel">Ajouter un Membre du Personnel</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addPersonnelForm">
+                    <div class="form-group">
+                        <label for="personnelNom">Nom</label>
+                        <input type="text" class="form-control" id="personnelNom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personnelPrenom">Prénom</label>
+                        <input type="text" class="form-control" id="personnelPrenom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personnelPoste">Poste</label>
+                        <input type="text" class="form-control" id="personnelPoste" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personnelSalaire">Salaire</label>
+                        <input type="number" step="0.01" class="form-control" id="personnelSalaire" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personnelHoraire">Horaire</label>
+                        <input type="text" class="form-control" id="personnelHoraire">
+                    </div>
+                    <div class="form-group">
+                        <label for="personnelDateEmbauche">Date d'Embauche</label>
+                        <input type="date" class="form-control" id="personnelDateEmbauche" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personnelMaxEnfants">Max Enfants</label>
+                        <input type="number" class="form-control" id="personnelMaxEnfants" value="5">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="submitPersonnelForm">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Gestion des Dons -->
+<div class="tab-pane fade" id="dons">
+    <h2>Gestion des Dons</h2>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addDonModal">Ajouter un Don</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ID Enfant</th>
+                <th>Auteur</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Montant</th>
+                <th>Destination</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="donsTableBody"></tbody>
+    </table>
+</div>
+<!-- Formulaire d'ajout pour Dons -->
+<div class="modal fade" id="addDonModal" tabindex="-1" role="dialog" aria-labelledby="addDonModalLabel" aria-hidden="true">
+    <h2 class="nest">Ajout d'un don  </h2>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDonModalLabel">Ajouter un Don</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addDonForm">
+                    <div class="form-group">
+                        <label for="donEnfantId">ID Enfant</label>
+                        <input type="number" class="form-control" id="donEnfantId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donAuteur">Auteur</label>
+                        <input type="text" class="form-control" id="donAuteur">
+                    </div>
+                    <div class="form-group">
+                        <label for="donType">Type</label>
+                        <select class="form-control" id="donType" required>
+                            <option value="financière">Financière</option>
+                            <option value="matérielle">Matérielle</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="donDate">Date</label>
+                        <input type="date" class="form-control" id="donDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donMontant">Montant</label>
+                        <input type="number" step="0.01" class="form-control" id="donMontant" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donDestination">Destination</label>
+                        <input type="text" class="form-control" id="donDestination">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="submitDonForm">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Gestion des Activités -->
+<div class="tab-pane fade" id="activites">
+    <h2>Gestion des Activités</h2>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addActiviteModal">Ajouter une Activité</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Montant</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="activitesTableBody"></tbody>
+    </table>
+</div>
+<!-- Formulaire d'ajout pour Activités -->
+<div class="modal fade" id="addActiviteModal" tabindex="-1" role="dialog" aria-labelledby="addActiviteModalLabel" aria-hidden="true">
+    <h2 class="nest">Ajout d'une activité </h2>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addActiviteModalLabel">Ajouter une Activité</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addActiviteForm">
+                    <div class="form-group">
+                        <label for="activiteNom">Nom de l'Activité</label>
+                        <input type="text" class="form-control" id="activiteNom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="activiteDate">Date</label>
+                        <input type="date" class="form-control" id="activiteDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="activiteMontant">Montant</label>
+                        <input type="number" step="0.01" class="form-control" id="activiteMontant" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="submitActiviteForm">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Gestion des Ressources -->
+<div class="tab-pane fade" id="ressources">
+    <h2>Gestion des Ressources</h2>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addRessourceModal">Ajouter une Ressource</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Quantité</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="ressourcesTableBody"></tbody>
+    </table>
+</div>
+<!-- Formulaire d'ajout pour Ressources -->
+<div class="modal fade" id="addRessourceModal" tabindex="-1" role="dialog" aria-labelledby="addRessourceModalLabel" aria-hidden="true">
+    <h2 class="nest">Ajout d'une ressource </h2>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addRessourceModalLabel">Ajouter une Ressource</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addRessourceForm">
+                    <div class="form-group">
+                        <label for="ressourceType">Type</label>
+                        <input type="text" class="form-control" id="ressourceType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ressourceQuantite">Quantité</label>
+                        <input type="number" class="form-control" id="ressourceQuantite" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="submitRessourceForm">Ajouter</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="container">
-
-    <!-- SECTION Personnel -->
-    <div id="personnel" class="section active">
-        <h2>Gestion du Personnel</h2>
-        <div class="form-container">
-            <button class="btn btn-primary mb-3" onclick="prepareAdd('personnel')">Ajouter un Membre du Personnel</button>
-            <form id="personnelForm" style="display:none" onsubmit="saveEntry('personnel'); return false;">
-                <div class="form-group">
-                    <label for="personnelNom">Nom</label>
-                    <input type="text" class="form-control" id="personnelNom" required>
-                </div>
-                <div class="form-group">
-                    <label for="personnelPrenom">Prénom</label>
-                    <input type="text" class="form-control" id="personnelPrenom" required>
-                </div>
-                <div class="form-group">
-                    <label for="personnelEmail">Email</label>
-                    <input type="email" class="form-control" id="personnelEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="personnelPassword">Mot de Passe</label>
-                    <input type="password" class="form-control" id="personnelPassword" required>
-                </div>
-                <div class="form-group">
-                    <label for="personnelRole">Rôle</label>
-                    <select class="form-control" id="personnelRole">
-                        <option value="employe">Employé</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('personnel')">Annuler</button>
-            </form>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Rôle</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="personnelTable"></tbody>
-        </table>
-    </div>
-
-    <!-- SECTION Enfants -->
-    <div id="enfants" class="section">
-        <h2>Gestion des Enfants</h2>
-        <div class="form-container">
-            <button class="btn btn-primary mb-3" onclick="prepareAdd('enfants')">Ajouter un Enfant</button>
-            <form id="enfantsForm" style="display:none" onsubmit="saveEntry('enfants'); return false;">
-                <div class="form-group">
-                    <label for="enfantNom">Nom</label>
-                    <input type="text" class="form-control" id="enfantNom" required>
-                </div>
-                <div class="form-group">
-                    <label for="enfantPrenom">Prénom</label>
-                    <input type="text" class="form-control" id="enfantPrenom" required>
-                </div>
-                <div class="form-group">
-                    <label for="enfantDateNaissance">Date de Naissance</label>
-                    <input type="date" class="form-control" id="enfantDateNaissance" required>
-                </div>
-                <div class="form-group">
-                    <label for="enfantSexe">Sexe</label>
-                    <select class="form-control" id="enfantSexe" required>
-                        <option value="M">Masculin</option>
-                        <option value="F">Féminin</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="enfantTuteur">Tuteur</label>
-                    <input type="text" class="form-control" id="enfantTuteur">
-                </div>
-                <div class="form-group">
-                    <label for="enfantDateEntree">Date d'Entrée</label>
-                    <input type="date" class="form-control" id="enfantDateEntree" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('enfants')">Annuler</button>
-            </form>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Date de Naissance</th>
-                    <th>Sexe</th>
-                    <th>Tuteur</th>
-                    <th>Date d'Entrée</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="enfantTable"></tbody>
-        </table>
-    </div>
-
-    <!-- SECTION Tuteurs -->
-    <div id="tuteurs" class="section">
-        <h2>Gestion des Tuteurs</h2>
-        <div class="form-container">
-            <button class="btn btn-primary mb-3" onclick="prepareAdd('tuteurs')">Ajouter un Tuteur</button>
-            <form id="tuteursForm" style="display:none" onsubmit="saveEntry('tuteurs'); return false;">
-                <div class="form-group">
-                    <label for="tuteurNom">Nom</label>
-                    <input type="text" class="form-control" id="tuteurNom" required>
-                </div>
-                <div class="form-group">
-                    <label for="tuteurPrenom">Prénom</label>
-                    <input type="text" class="form-control" id="tuteurPrenom" required>
-                </div>
-                <div class="form-group">
-                    <label for="tuteurTelephone">Téléphone</label>
-                    <input type="tel" class="form-control" id="tuteurTelephone">
-                </div>
-                <div class="form-group">
-                    <label for="tuteurAdresse">Adresse</label>
-                    <textarea class="form-control" id="tuteurAdresse"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('tuteurs')">Annuler</button>
-            </form>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Téléphone</th>
-                    <th>Adresse</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="tuteurTable"></tbody>
-        </table>
-    </div>
-
-    <!-- SECTION Chambres -->
-    <div id="chambres" class="section">
-        <h2>Gestion des Chambres</h2>
-        <div class="form-container">
-            <button class="btn btn-primary mb-3" onclick="prepareAdd('chambres')">Ajouter une Chambre</button>
-            <form id="chambresForm" style="display:none" onsubmit="saveEntry('chambres'); return false;">
-                <div class="form-group">
-                    <label for="chambreNumero">Numéro de Chambre</label>
-                    <input type="text" class="form-control" id="chambreNumero" required>
-                </div>
-                <div class="form-group">
-                    <label for="chambreCapacite">Capacité</label>
-                    <input type="number" class="form-control" id="chambreCapacite" required>
-                </div>
-                <div class="form-group">
-                    <label for="chambreOccupation">Occupation Actuelle</label>
-                    <input type="number" class="form-control" id="chambreOccupation">
-                </div>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('chambres')">Annuler</button>
-            </form>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Numéro</th>
-                    <th>Capacité</th>
-                    <th>Occupation</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="chambreTable"></tbody>
-        </table>
-    </div>
-
-    <!-- SECTION Activités -->
-    <div id="activites" class="section">
-        <h2>Gestion des Activités</h2>
-        <div class="form-container">
-            <button class="btn btn-primary mb-3" onclick="prepareAdd('activites')">Ajouter une Activité</button>
-            <form id="activitesForm" style="display:none" onsubmit="saveEntry('activites'); return false;">
-                <div class="form-group">
-                    <label for="activiteTitre">Titre</label>
-                    <input type="text" class="form-control" id="activiteTitre" required>
-                </div>
-                <div class="form-group">
-                    <label for="activiteDescription">Description</label>
-                    <textarea class="form-control" id="activiteDescription" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="activiteDate">Date</label>
-                    <input type="date" class="form-control" id="activiteDate" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('activites')">Annuler</button>
-            </form>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Titre</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="activiteTable"></tbody>
-        </table>
-    </div>
-
-    <!-- SECTION Budgets -->
-    <div id="budgets" class="section">
-        <h2>Gestion des Budgets</h2>
-        <div class="form-container">
-            <button class="btn btn-primary mb-3" onclick="prepareAdd('budgets')">Ajouter un Budget</button>
-            <form id="budgetsForm" style="display:none" onsubmit="saveEntry('budgets'); return false;">
-                <div class="form-group">
-                    <label for="budgetCategorie">Catégorie</label>
-                    <input type="text" class="form-control" id="budgetCategorie" required>
-                </div>
-                <div class="form-group">
-                    <label for="budgetMontant">Montant</label>
-                    <input type="number" class="form-control" id="budgetMontant" required>
-                </div>
-                <div class="form-group">
-                    <label for="budgetDate">Date d'Enregistrement</label>
-                    <input type="date" class="form-control" id="budgetDate" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('budgets')">Annuler</button>
-            </form>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Catégorie</th>
-                    <th>Montant</th>
-                    <th>Date d'Enregistrement</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="budgetTable"></tbody>
-        </table>
-    </div>
-
-    <!-- SECTION Archives -->
-    <div id="archives" class="section">
-        <h2>Gestion des Archives</h2>
-        <div class="form-container">
-            <button class="btn btn-primary mb-3" onclick="prepareAdd('archives')">Ajouter une Archive</button>
-            <form id="archivesForm" style="display:none" onsubmit="saveEntry('archives'); return false;">
-                <div class="form-group">
-                    <label for="archiveType">Type</label>
-                    <input type="text" class="form-control" id="archiveType" required>
-                </div>
-                <div class="form-group">
-                    <label for="archiveDescription">Description</label>
-                    <textarea class="form-control" id="archiveDescription" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="archiveDate">Date</label>
-                    <input type="date" class="form-control" id="archiveDate" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('archives')">Annuler</button>
-            </form>
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="archiveTable"></tbody>
-        </table>
-    </div>
-
+<!-- Gestion des Budgets -->
+<div class="tab-pane fade" id="budgets">
+    <h2>Gestion des Budgets</h2>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addBudgetModal">Ajouter un Budget</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Entrées</th>
+                <th>Dépenses</th>
+                <th>Solde</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="budgetsTableBody"></tbody>
+    </table>
 </div>
+<!-- Formulaire d'ajout pour Budgets -->
+<div class="modal fade" id="addBudgetModal" tabindex="-1" role="dialog" aria-labelledby="addBudgetModalLabel" aria-hidden="true">
+    <h2 class="nest">Ajout d'un budget </h2>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBudgetModalLabel">Ajouter un Budget</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addBudgetForm">
+                    <div class="form-group">
+                        <label for="budgetEntree">Entrées</label>
+                        <input type="number" step="0.01" class="form-control" id="budgetEntree" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="budgetDepense">Dépenses</label>
+                        <input type="number" step="0.01" class="form-control" id="budgetDepense" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="budgetSolde">Solde</label>
+                        <input type="number" step="0.01" class="form-control" id="budgetSolde" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="submitBudgetForm">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gestion des Adoptions -->
+<div class="tab-pane fade" id="adoptions">
+    <h2>Gestion des Adoptions</h2>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addAdoptionModal">Ajouter une Adoption</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Parrain</th>
+                <th>Marraine</th>
+                <th>Email Parrain</th>
+                <th>Email Marraine</th>
+                <th>ID Enfant Adopté</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="adoptionsTableBody"></tbody>
+    </table>
+</div>
+<!-- Formulaire d'ajout pour Adoptions -->
+<div class="modal fade" id="addAdoptionModal" tabindex="-1" role="dialog" aria-labelledby="addAdoptionModalLabel" aria-hidden="true">
+    <h2 class="nest">Ajout d'adoption </h2>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAdoptionModalLabel">Ajouter une Adoption</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addAdoptionForm">
+                    <div class="form-group">
+                        <label for="adoptionParrain">Nom du Parrain</label>
+                        <input type="text" class="form-control" id="adoptionParrain" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adoptionMarraine">Nom de la Marraine</label>
+                        <input type="text" class="form-control" id="adoptionMarraine" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adoptionEmailParrain">Email du Parrain</label>
+                        <input type="email" class="form-control" id="adoptionEmailParrain" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adoptionEmailMarraine">Email de la Marraine</label>
+                        <input type="email" class="form-control" id="adoptionEmailMarraine" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adoptionEnfantId">ID Enfant Adopté</label>
+                        <input type="number" class="form-control" id="adoptionEnfantId" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="submitAdoptionForm">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Gestion des Archives Enfants -->
+<div class="tab-pane fade" id="archives_enfants">
+    <h2>Archives des Enfants</h2>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addArchiveEnfantModal">Ajouter une Archive</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ID Enfant</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="archivesEnfantsTableBody"></tbody>
+    </table>
+</div>
+<!-- Formulaire d'ajout pour Archives Enfants -->
+<div class="modal fade" id="addArchiveEnfantModal" tabindex="-1" role="dialog" aria-labelledby="addArchiveEnfantModalLabel" aria-hidden="true">
+    <h2 class="nest">Ajout d'archives enfants  </h2>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addArchiveEnfantModalLabel">Ajouter une Archive</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addArchiveEnfantForm">
+                    <div class="form-group">
+                        <label for="archiveEnfantId">ID Enfant</label>
+                        <input type="number" class="form-control" id="archiveEnfantId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="archiveEnfantDesc">Description</label>
+                        <textarea class="form-control" id="archiveEnfantDesc" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="archiveEnfantDate">Date</label>
+                        <input type="datetime-local" class="form-control" id="archiveEnfantDate" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="submitArchiveEnfantForm">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gestion des Archives Personnel -->
+<div class="tab-pane fade" id="archives_personnel">
+    <h2>Archives du Personnel</h2>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addArchivePersonnelModal">Ajouter une Archive</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ID Personnel</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="archivesPersonnelTableBody"></tbody>
+    </table>
+
+      </div>
+     </div>
+    </div><!-- Formulaire d'ajout pour Archives Personnel -->
+    <div class="modal fade" id="addArchivePersonnelModal" tabindex="-1" role="dialog" aria-labelledby="addArchivePersonnelModalLabel" aria-hidden="true">
+        <h2 class="nest">Ajout d'archives personnel </h2>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addArchivePersonnelModalLabel">Ajouter une Archive</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addArchivePersonnelForm">
+                        <div class="form-group">
+                            <label for="archivePersonnelId">ID Personnel</label>
+                            <input type="number" class="form-control" id="archivePersonnelId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="archivePersonnelDesc">Description</label>
+                            <textarea class="form-control" id="archivePersonnelDesc" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="archivePersonnelDate">Date</label>
+                            <input type="datetime-local" class="form-control" id="archivePersonnelDate" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" id="submitArchivePersonnelForm">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    let currentSection = "";
+  // Gestion des Enfants
+document.getElementById('submitEnfantForm').addEventListener('click', function () {
+    // Récupération des données du formulaire
+    const nom = document.getElementById('enfantNom').value;
+    const prenom = document.getElementById('enfantPrenom').value;
+    const dateNaissance = document.getElementById('enfantDateNaissance').value;
+    const dateEntree = document.getElementById('enfantDateEntree').value || 'N/A';
+    const medHist = document.getElementById('enfantMedHist').value || 'N/A';
+    const tuteurId = document.getElementById('enfantTuteurId').value;
+    const scoleRes = document.getElementById('enfantScoleRes').value || 'N/A';
+    const chambre = document.getElementById('enfantChambre').value || 'N/A';
+    const sexe = document.getElementById('enfantSexe').value;
 
-    function showSection(section) {
-        const sections = document.querySelectorAll('.section');
-        sections.forEach(sec => sec.classList.remove('active'));
-        document.getElementById(section).classList.add('active');
-        currentSection = section;
+    // Validation des données
+    if (!nom || !prenom || !dateNaissance || !tuteurId || !sexe) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
     }
 
-    function prepareAdd(section) {
-        document.getElementById(`${section}Form`).style.display = 'block';
-        const formElements = document.querySelectorAll(`#${section}Form input, #${section}Form textarea`);
-        formElements.forEach(input => input.value = '');
-    }
+    // Ajouter une ligne dans le tableau
+    const tableBody = document.getElementById('enfantsTableBody');
+    const newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${nom}</td>
+        <td>${prenom}</td>
+        <td>${dateNaissance}</td>
+        <td>${dateEntree}</td>
+        <td>${medHist}</td>
+        <td>${tuteurId}</td>
+        <td>${scoleRes}</td>
+        <td>${chambre}</td>
+        <td>${sexe}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+        </td>
+    `;
 
-    function cancelForm(section) {
-        document.getElementById(`${section}Form`).style.display = 'none';
-    }
+    // Réinitialiser le formulaire
+    document.getElementById('addEnfantForm').reset();
 
-    function saveEntry(section) {
-        const tableBody = document.getElementById(`${section}Table`);
-        const formData = new FormData(document.getElementById(`${section}Form`));
-        const data = {};
+    // Fermer la modal
+    $('#addEnfantModal').modal('hide');
+});
 
-        formData.forEach((value, key) => {
-            data[key] = value;
-        });
-
-        const id = tableBody.rows.length + 1;
-        const row = document.createElement('tr');
-        row.dataset.id = id;
-
-        Object.values(data).forEach(value => {
-            const cell = document.createElement('td');
-            cell.textContent = value;
-            row.appendChild(cell);
-        });
-
-        const actionsCell = document.createElement('td');
-        actionsCell.innerHTML = `
-            <button class="btn btn-warning" onclick="editRow(${id}, '${section}')">Modifier</button>
-            <button class="btn btn-danger" onclick="deleteRow(${id}, '${section}')">Supprimer</button>
+// Fonction pour supprimer une ligne
+function supprimerLigne(button) {
+    const row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+}
+// Gestion du Personnel
+    document.getElementById('submitPersonnelForm').addEventListener('click', function () {
+        const nom = document.getElementById('personnelNom').value;
+        const prenom = document.getElementById('personnelPrenom').value;
+        const poste = document.getElementById('personnelPoste').value;
+        const salaire = document.getElementById('personnelSalaire').value;
+        const horaire = document.getElementById('personnelHoraire').value || 'N/A';
+        const dateEmbauche = document.getElementById('personnelDateEmbauche').value;
+        const maxEnfants = document.getElementById('personnelMaxEnfants').value;
+    
+        if (!nom || !prenom || !poste || !salaire || !dateEmbauche) {
+            alert('Veuillez remplir tous les champs obligatoires.');
+            return;
+        }
+    
+        const tableBody = document.getElementById('personnelTableBody');
+        const newRow = tableBody.insertRow();
+        newRow.innerHTML = `
+            <td>${tableBody.rows.length + 1}</td>
+            <td>${nom}</td>
+            <td>${prenom}</td>
+            <td>${poste}</td>
+            <td>${salaire}</td>
+            <td>${horaire}</td>
+            <td>${dateEmbauche}</td>
+            <td>${maxEnfants}</td>
+            <td>
+                <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+            </td>
         `;
-        row.appendChild(actionsCell);
+    
+        document.getElementById('addPersonnelForm').reset();
+        $('#addPersonnelModal').modal('hide');
+    });
+ 
+        // Gestion des Dons
+document.getElementById('submitDonForm').addEventListener('click', function () {
+    const enfantId = document.getElementById('donEnfantId').value;
+    const auteur = document.getElementById('donAuteur').value || 'Anonyme';
+    const type = document.getElementById('donType').value;
+    const date = document.getElementById('donDate').value;
+    const montant = document.getElementById('donMontant').value;
+    const destination = document.getElementById('donDestination').value || 'N/A';
 
-        tableBody.appendChild(row);
-        cancelForm(section);
+    if (!enfantId || !type || !date || !montant) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
     }
 
-    function deleteRow(id, section) {
-        const row = document.querySelector(`#${section}Table tr[data-id="${id}"]`);
-        row.remove();
+    const tableBody = document.getElementById('donsTableBody');
+    const newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${enfantId}</td>
+        <td>${auteur}</td>
+        <td>${type}</td>
+        <td>${date}</td>
+        <td>${montant}</td>
+        <td>${destination}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+        </td>
+    `;
+
+    document.getElementById('addDonForm').reset();
+    $('#addDonModal').modal('hide');
+});
+    
+        // Gestion des Activités
+document.getElementById('submitActiviteForm').addEventListener('click', function () {
+    const nom = document.getElementById('activiteNom').value;
+    const date = document.getElementById('activiteDate').value;
+    const montant = document.getElementById('activiteMontant').value;
+
+    if (!nom || !date || !montant) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
     }
 
-    function editRow(id, section) {
-        const row = document.querySelector(`#${section}Table tr[data-id="${id}"]`);
-        const cells = row.getElementsByTagName('td');
-        const form = document.getElementById(`${section}Form`);
-        form.style.display = 'block';
+    const tableBody = document.getElementById('activitesTableBody');
+    const newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${nom}</td>
+        <td>${date}</td>
+        <td>${montant}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+        </td>
+    `;
 
-        const formElements = form.querySelectorAll('input, textarea');
-        formElements.forEach((element, index) => {
-            element.value = cells[index].textContent;
-        });
+    document.getElementById('addActiviteForm').reset();
+    $('#addActiviteModal').modal('hide');
+});
+   
+        // Gestion des Ressources
+document.getElementById('submitRessourceForm').addEventListener('click', function () {
+    const type = document.getElementById('ressourceType').value;
+    const quantite = document.getElementById('ressourceQuantite').value;
 
-        deleteRow(id, section);
+    if (!type || !quantite) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
     }
+
+    const tableBody = document.getElementById('ressourcesTableBody');
+    const newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${type}</td>
+        <td>${quantite}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+        </td>
+    `;
+
+    document.getElementById('addRessourceForm').reset();
+    $('#addRessourceModal').modal('hide');
+});
+    
+        // Gestion des Budgets
+document.getElementById('submitBudgetForm').addEventListener('click', function () {
+    const entree = document.getElementById('budgetEntree').value;
+    const depense = document.getElementById('budgetDepense').value;
+    const solde = document.getElementById('budgetSolde').value;
+
+    if (!entree || !depense || !solde) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+    }
+
+    const tableBody = document.getElementById('budgetsTableBody');
+    const newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${entree}</td>
+        <td>${depense}</td>
+        <td>${solde}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+        </td>
+    `;
+
+    document.getElementById('addBudgetForm').reset();
+    $('#addBudgetModal').modal('hide');
+});
+    
+        // Gestion des Adoptions
+document.getElementById('submitAdoptionForm').addEventListener('click', function () {
+    const parrain = document.getElementById('adoptionParrain').value;
+    const marraine = document.getElementById('adoptionMarraine').value;
+    const emailParrain = document.getElementById('adoptionEmailParrain').value;
+    const emailMarraine = document.getElementById('adoptionEmailMarraine').value;
+    const enfantId = document.getElementById('adoptionEnfantId').value;
+
+    if (!parrain || !marraine || !emailParrain || !emailMarraine || !enfantId) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+    }
+
+    const tableBody = document.getElementById('adoptionsTableBody');
+    const newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${parrain}</td>
+        <td>${marraine}</td>
+        <td>${emailParrain}</td>
+        <td>${emailMarraine}</td>
+        <td>${enfantId}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+        </td>
+    `;
+
+    document.getElementById('addAdoptionForm').reset();
+    $('#addAdoptionModal').modal('hide');
+});
+    
+        // Gestion des Archives Enfants
+document.getElementById('submitArchiveEnfantForm').addEventListener('click', function () {
+    const enfantId = document.getElementById('archiveEnfantId').value;
+    const description = document.getElementById('archiveEnfantDesc').value;
+    const date = document.getElementById('archiveEnfantDate').value;
+
+    if (!enfantId || !description || !date) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+    }
+
+    const tableBody = document.getElementById('archivesEnfantsTableBody');
+    const newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${enfantId}</td>
+        <td>${description}</td>
+        <td>${date}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+        </td>
+    `;
+
+    document.getElementById('addArchiveEnfantForm').reset();
+    $('#addArchiveEnfantModal').modal('hide');
+});
+    
+        // Gestion des Archives Personnel
+document.getElementById('submitArchivePersonnelForm').addEventListener('click', function () {
+    const personnelId = document.getElementById('archivePersonnelId').value;
+    const description = document.getElementById('archivePersonnelDesc').value;
+    const date = document.getElementById('archivePersonnelDate').value;
+
+    if (!personnelId || !description || !date) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+    }
+
+    const tableBody = document.getElementById('archivesPersonnelTableBody');
+    const newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${personnelId}</td>
+        <td>${description}</td>
+        <td>${date}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>
+        </td>
+    `;
+
+    document.getElementById('addArchivePersonnelForm').reset();
+    $('#addArchivePersonnelModal').modal('hide');
+});
 </script>
 
 </body>
